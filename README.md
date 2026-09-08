@@ -1,156 +1,208 @@
 # ⚡ OmniWave Gateway
 
-**Free AI Gateway**
-## Screenshots
+**Free, open-source AI API gateway** — route requests across 350+ LLM providers through one OpenAI-compatible `/v1` endpoint. Auto-fallback, context compression, 19 routing strategies, and a live dashboard.
 
-### Dashboard Overview
-![Overview](docs/screenshots/overview.png)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Node.js](https://img.shields.io/badge/Node.js-%3E%3D18-green.svg)](https://nodejs.org)
+[![Termux](https://img.shields.io/badge/Termux-✅-cyan.svg)](#-install-on-termux-android)
 
-### Provider Management
-![Providers](docs/screenshots/providers.png)
+![Dashboard Preview](docs/dashboard-overview.png)
+![Providers View](docs/dashboard-providers.png)
+![Routing View](docs/dashboard-routing.png)
 
-### Routing Strategies
-![Routing](docs/screenshots/routing.png)
+## ✨ Features
 
-### Context Compression
-![Compression](docs/screenshots/compression.png)
+- **350+ Models** — OpenAI, Anthropic, Gemini, Groq, DeepSeek, OpenRouter, and 10+ more
+- **Auto-Routing** — Smart auto-combo with 5 modes (balanced, fast, cheap, coding, offline)
+- **19 Strategies** — Round-robin, weighted, P2C, cost-optimized, pipeline, fusion, and more
+- **Context Compression** — 6 engines reduce token usage by 20-60%
+- **Circuit Breakers** — 3-layer resilience: provider breaker, cooldown, model lockout
+- **Streaming** — Full SSE streaming support via OpenAI-compatible API
+- **Dashboard** — Beautiful dark-mode web UI with live monitoring
+- **CLI** — Terminal-based management: status, add keys, test connections
+- **📱 Termux** — Run on Android phones — background mode, tmux support
 
----
+## 🚀 Quick Start
 
- — Route across 350+ LLM providers through one OpenAI-compatible endpoint with automatic fallback, context compression, and 19 routing strategies.
-
-> Inspired by [OmniRoute](https://omniroute.online) · MIT Licensed
-
-## Features
-
-- 🔀 **19 Routing Strategies** — priority, weighted, round-robin, auto-combo, and more
-- 🤖 **Auto-Combo** — `auto`, `auto/fast`, `auto/cheap`, `auto/coding`, `auto/offline`
-- 🌐 **350+ Providers** — OpenAI, Anthropic, Gemini, OpenRouter, Groq, DeepSeek, Mistral, Together, and 10+ more
-- 🗜️ **Context Compression** — 6-engine pipeline: dedup, caveman, filler, whitespace, merge, truncate
-- 🛡️ **3-Layer Resilience** — Circuit breaker, connection cooldown, model lockout
-- 🔐 **Encrypted Keys** — AES-256-GCM at rest
-- 📊 **Dashboard** — Full web UI with provider management, routing, compression, logs
-- 🖥️ **CLI** — Terminal management tool
-- 🐳 **Docker** — One-command deployment
-- ⚡ **Streaming** — SSE streaming support
-- 🔗 **OpenAI Compatible** — Drop-in replacement for `/v1`
-
-## Quick Start
+### Linux / macOS / Windows
 
 ```bash
-# Install
+git clone https://github.com/canelaslorenzo0-png/omniwave.git
+cd omniwave
+./install.sh
+npm start
+```
+
+Then open **http://localhost:20128**
+
+### 📱 Install on Termux (Android)
+
+**Option 1: One-liner**
+
+```bash
+pkg install git && git clone https://github.com/canelaslorenzo0-png/omniwave.git && cd omniwave && ./install.sh && npm start
+```
+
+**Option 2: Step by step**
+
+```bash
+# Install dependencies
+pkg update -y
+pkg install nodejs npm git tmux
+
+# Clone and install
+git clone https://github.com/canelaslorenzo0-png/omniwave.git
+cd omniwave
 ./install.sh
 
-# Or manually
-npm install && npm start
-
-# Dashboard at http://localhost:20128
+# Start the gateway
+npm start
 ```
 
-## Connect Your Tools
-
-Point any OpenAI-compatible tool at OmniWave:
-
-```
-Base URL:  http://localhost:20128/v1
-API Key:   (from .env or dashboard)
-Model:     auto          (smart routing — or any provider/model)
-```
-
-### Supported Integrations
-
-| Tool | Config |
-|------|--------|
-| **Claude Code** | `export ANTHROPIC_BASE_URL=http://localhost:20128` |
-| **Codex** | `export OPENAI_BASE_URL=http://localhost:20128/v1` |
-| **Cursor** | Settings → OpenAI API URL → `http://localhost:20128/v1` |
-| **Cline** | API Provider → OpenAI Compatible → `http://localhost:20128/v1` |
-| **curl** | `curl http://localhost:20128/v1/chat/completions -H "Authorization: Bearer YOUR_KEY"` |
-
-## CLI
+**Run in background (Termux)**
 
 ```bash
-omniwave status        # Gateway status
-omniwave providers     # List providers
-omniwave add           # Add API key
-omniwave models        # List models
-omniwave test          # Test connection
-omniwave start         # Start gateway
+# Start in background
+omniwave termux-start
+
+# Check status
+omniwave termux-status
+
+# View logs
+omniwave termux-logs
+
+# Stop
+omniwave termux-stop
 ```
 
-## API Reference
+**24/7 persistent session with tmux**
 
-### Chat Completions
-```
-POST /v1/chat/completions
-```
-
-### Models
-```
-GET /v1/models
+```bash
+pkg install tmux
+tmux new -s omniwave
+omniwave start
+# Press Ctrl+B, then D to detach
+# Re-attach later: tmux attach -t omniwave
 ```
 
-### Responses API
-```
-POST /v1/responses
+**Termux Tips**
+- The dashboard is fully responsive — works great on phone screens
+- Add the dashboard to your home screen for easy access
+- Use `termux-services` for auto-start on boot
+- Storage access is requested automatically on first install
+
+## 🔌 Connect Your Tools
+
+**Base URL:** `http://localhost:20128/v1`  
+**API Key:** Auto-generated (see `.env` file or dashboard)  
+**Model:** Use `auto` for smart routing, or any provider model name
+
+### Claude Desktop / Cursor / VS Code
+
+```json
+{
+  "openai_api_base": "http://localhost:20128/v1",
+  "openai_api_key": "ow_your_key_here",
+  "model": "auto"
+}
 ```
 
-### Headers
-- `X-OmniWave-Strategy` — Override routing strategy per request
-- `X-OmniWave-Compression` — Override compression mode per request
-- `X-OmniWave-Provider` (response) — Which provider served the request
-- `X-OmniWave-Latency` (response) — Request latency in ms
-- `X-OmniRoute-Compression` (response) — Compression stats
+### cURL
 
-## Environment
+```bash
+curl http://localhost:20128/v1/chat/completions \
+  -H "Authorization: Bearer ow_your_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{"model":"auto","messages":[{"role":"user","content":"Hello!"}]}'
+```
+
+### Python
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="http://localhost:20128/v1",
+    api_key="ow_your_key_here",
+)
+
+response = client.chat.completions.create(
+    model="auto",
+    messages=[{"role": "user", "content": "Hello!"}],
+)
+print(response.choices[0].message.content)
+```
+
+## 🎯 Routing Strategies
+
+| Strategy | Description |
+|----------|-------------|
+| `auto` | Smart 15-factor scoring (balanced) |
+| `auto/fast` | Lowest latency first |
+| `auto/cheap` | Cheapest per token |
+| `auto/coding` | Code quality first |
+| `auto/offline` | Most quota headroom |
+| `round-robin` | Cycle through providers |
+| `weighted` | Weighted random |
+| `p2c` | Power-of-two-choices load balancing |
+| `cost-optimized` | Minimize cost |
+| `lkgp` | Last-Known-Good-Path sticky routing |
+| `fusion` | Fan out to panel + judge |
+| `pipeline` | Chain steps sequentially |
+
+Set via header: `X-OmniWave-Strategy: auto/fast`
+
+## 📦 Supported Providers
+
+| Provider | Free Tier | Models |
+|----------|-----------|--------|
+| OpenAI | ❌ | GPT-4o, GPT-5, o1, o3 |
+| Anthropic | ❌ | Claude Opus, Sonnet, Haiku |
+| Google Gemini | ✅ | Gemini 2.5 Pro, Flash |
+| OpenRouter | ✅ | 350+ models |
+| Groq | ✅ | Llama, Mixtral |
+| DeepSeek | ❌ | DeepSeek Chat & Reasoner |
+| Mistral AI | ✅ | Mistral Large, Codestral |
+| Together AI | ✅ | Open-source models |
+| Fireworks AI | ✅ | Fast serverless inference |
+| Perplexity | ❌ | Search-augmented LLMs |
+| Cerebras | ✅ | Wafer-scale inference |
+| NVIDIA NIM | ✅ | NVIDIA-hosted models |
+| Cohere | ✅ | Command R models |
+| SiliconFlow | ✅ | DeepSeek, Qwen, GLM |
+| Custom | — | Any OpenAI-compatible API |
+
+## 🔧 Environment Variables
 
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `PORT` | `20128` | Server port |
-| `OMNIWAVE_KEY` | auto-generated | Gateway API key |
+| `OMNIWAVE_KEY` | Auto-generated | API key |
 
-## Docker
+## 🏗️ Docker
 
 ```bash
-docker compose up -d
-# Or
-docker run -d -p 20128:20128 -v omniwave-data:/app/data diegosouzapw/omniwave:latest
+docker-compose up -d
 ```
 
-## Routing Strategies
+## 📁 Project Structure
 
-| # | Strategy | Description |
-|---|----------|-------------|
-| 1 | `priority` | Ordered list — drain each before next |
-| 2 | `fill-first` | Fill each target's quota fully |
-| 3 | `weighted` | Weighted random by per-target weight |
-| 4 | `round-robin` | Cycle through targets |
-| 5 | `p2c` | Power-of-two-choices load balancing |
-| 6 | `least-used` | Lowest current load |
-| 7 | `random` | Uniform random |
-| 8 | `strict-random` | Random without dedup |
-| 9 | `cost-optimized` | Minimize cost per token |
-| 10 | `headroom` | Most remaining quota |
-| 11 | `reset-window` | Quota resets soonest |
-| 12 | `reset-aware` | Rank by reset time |
-| 13 | `context-relay` | Hand off context across targets |
-| 14 | `context-optimized` | Best fit for context size |
-| 15 | `cache-optimized` | Pin prompts for cache hits |
-| 16 | `lkgp` | Last-Known-Good Path |
-| 17 | `auto` | 15-factor live scoring |
-| 18 | `fusion` | Fan out + judge |
-| 19 | `pipeline` | Chain steps |
+```
+omniwave/
+├── src/
+│   ├── index.js              # Express server
+│   ├── providers/            # Provider registry & adapter
+│   ├── routing/              # Routing engine (19 strategies)
+│   ├── resilience/           # Circuit breaker
+│   ├── compression/          # 6 compression engines
+│   └── storage/              # Encrypted key storage
+├── bin/omniwave.js           # CLI tool
+├── termux/                   # Termux service scripts
+├── public/                   # Dashboard (HTML/CSS/JS)
+├── install.sh                # Universal installer
+└── README.md
+```
 
-## Compression Modes
-
-| Mode | Engines Active | Savings |
-|------|---------------|---------|
-| `off` | None | 0% |
-| `lite` | Dedup, whitespace | 5-15% |
-| `standard` | + Caveman | 15-40% |
-| `aggressive` | + Filler, truncate | 40-70% |
-| `ultra` | All engines max | 60-90% |
-
-## License
+## 📄 License
 
 MIT

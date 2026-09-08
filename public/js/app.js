@@ -380,3 +380,53 @@ setInterval(() => {
   if (active === 'overview') loadOverview();
   if (active === 'resilience') loadResilience();
 }, 8000);
+
+/* ─── Termux / Mobile Support ─── */
+function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  if (sidebar) sidebar.classList.toggle('open');
+}
+
+// Close sidebar on mobile when clicking a nav item
+document.querySelectorAll('.nav-links li').forEach(li => {
+  li.addEventListener('click', () => {
+    if (window.innerWidth <= 768) {
+      const sidebar = document.getElementById('sidebar');
+      if (sidebar) sidebar.classList.remove('open');
+    }
+  });
+});
+
+// Close sidebar on outside click (mobile)
+document.addEventListener('click', (e) => {
+  if (window.innerWidth <= 768) {
+    const sidebar = document.getElementById('sidebar');
+    const menuBtn = document.querySelector('.mobile-menu-btn');
+    if (sidebar && !sidebar.contains(e.target) && !menuBtn?.contains(e.target)) {
+      sidebar.classList.remove('open');
+    }
+  }
+});
+
+// Show Termux tip if on mobile
+if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+  const tip = document.createElement('div');
+  tip.className = 'termux-tip';
+  tip.innerHTML = `
+    <div class="icon">📱</div>
+    <div>
+      <strong>Running on Mobile?</strong>
+      <p>This dashboard works great on phones! Use the menu ☰ to navigate.</p>
+      <p>For the best experience, add this page to your home screen.</p>
+    </div>
+  `;
+  const overview = document.getElementById('tab-overview');
+  if (overview) overview.prepend(tip);
+}
+
+// Haptic feedback on mobile menu interactions
+if (navigator.vibrate) {
+  document.querySelectorAll('.nav-links li, .btn, .mobile-menu-btn').forEach(el => {
+    el.addEventListener('click', () => navigator.vibrate(15));
+  });
+}

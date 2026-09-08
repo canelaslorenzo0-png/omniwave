@@ -1,20 +1,18 @@
 {
   "name": "omniwave",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Free AI Gateway — route across 350+ providers through one OpenAI-compatible endpoint with auto-fallback, compression, and 19 routing strategies",
   "main": "src/index.js",
   "bin": { "omniwave": "./bin/omniwave.js" },
   "scripts": {
     "start": "node src/index.js",
     "dev": "node src/index.js --dev",
-    "cli": "node bin/omniwave.js"
+    "cli": "node bin/omniwave.js",
+    "termux-start": "bash termux/start.sh",
+    "termux-stop": "bash termux/stop.sh"
   },
   "dependencies": {
     "express": "^4.21.0",
-    "better-sqlite3": "^11.0.0",
-    "pino": "^9.0.0",
-    "pino-pretty": "^11.0.0",
-    "zod": "^3.23.0",
     "uuid": "^10.0.0"
   },
   "license": "MIT"

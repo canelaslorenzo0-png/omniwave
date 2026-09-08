@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 const http = require('http');
 const readline = require('readline');
+const { execSync } = require('child_process');
+const path = require('path');
 
 const BASE_URL = process.env.OMNIWAVE_URL || 'http://localhost:20128';
 const args = process.argv.slice(2);
@@ -132,20 +134,38 @@ async function testConnection() {
   }
 }
 
+function termuxCommand(action) {
+  const scriptDir = path.join(__dirname, '..', 'termux');
+  const script = path.join(scriptDir, `${action}.sh`);
+  try {
+    execSync(`bash "${script}"`, { stdio: 'inherit', cwd: scriptDir });
+  } catch (e) {
+    printErr(`Termux ${action} failed`);
+  }
+}
+
 async function showHelp() {
   printHeader('OmniWave CLI');
   print('  Commands:');
-  print('    omniwave status        Show gateway status');
-  print('    omniwave providers     List providers');
-  print('    omniwave add           Add an API key');
-  print('    omniwave models        List available models');
-  print('    omniwave test          Test gateway connection');
-  print('    omniwave start         Start the gateway');
-  print('    omniwave help          Show this help');
+  print('    omniwave status          Show gateway status');
+  print('    omniwave providers       List providers');
+  print('    omniwave add             Add an API key');
+  print('    omniwave models          List available models');
+  print('    omniwave test            Test gateway connection');
+  print('    omniwave start           Start the gateway');
+  print('');
+  print('  Termux Commands:');
+  print('    omniwave termux-start    Start in background');
+  print('    omniwave termux-stop     Stop background process');
+  print('    omniwave termux-status   Check running status');
+  print('    omniwave termux-logs     View recent logs');
+  print('    omniwave termux-install  Install Termux deps');
   print('');
   print('  Environment:');
   print(`    OMNIWAVE_URL=${BASE_URL}`);
   print(`    PORT=20128`);
+  print('');
+  print('  Dashboard: http://localhost:20128');
 }
 
 async function main() {
@@ -156,13 +176,16 @@ async function main() {
     case 'models': await showModels(); break;
     case 'test': await testConnection(); break;
     case 'start': {
-      const { execSync } = require('child_process');
-      const path = require('path');
       const serverPath = path.join(__dirname, '..', 'src', 'index.js');
       try { execSync(`node ${serverPath}`, { stdio: 'inherit' }); }
       catch (e) { printErr(`Failed to start: ${e.message}`); }
       break;
     }
+    case 'termux-start': termuxCommand('start'); break;
+    case 'termux-stop': termuxCommand('stop'); break;
+    case 'termux-status': termuxCommand('status'); break;
+    case 'termux-logs': termuxCommand('logs'); break;
+    case 'termux-install': termuxCommand('install-deps'); break;
     case 'help': case '--help': case '-h': default: await showHelp(); break;
   }
   rl.close();
