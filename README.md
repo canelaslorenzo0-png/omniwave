@@ -1,6 +1,23 @@
 # ⚡ OmniWave Gateway
 
-**Free AI Gateway** — Route across 350+ LLM providers through one OpenAI-compatible endpoint with automatic fallback, context compression, and 19 routing strategies.
+**Free AI Gateway**
+## Screenshots
+
+### Dashboard Overview
+![Overview](docs/screenshots/overview.png)
+
+### Provider Management
+![Providers](docs/screenshots/providers.png)
+
+### Routing Strategies
+![Routing](docs/screenshots/routing.png)
+
+### Context Compression
+![Compression](docs/screenshots/compression.png)
+
+---
+
+ — Route across 350+ LLM providers through one OpenAI-compatible endpoint with automatic fallback, context compression, and 19 routing strategies.
 
 > Inspired by [OmniRoute](https://omniroute.online) · MIT Licensed
 
