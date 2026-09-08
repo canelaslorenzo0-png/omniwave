@@ -6,9 +6,9 @@
 [![Node.js](https://img.shields.io/badge/Node.js-%3E%3D18-green.svg)](https://nodejs.org)
 [![Termux](https://img.shields.io/badge/Termux-✅-cyan.svg)](#-install-on-termux-android)
 
-![Dashboard Preview](docs/dashboard-overview.png)
-![Providers View](docs/dashboard-providers.png)
-![Routing View](docs/dashboard-routing.png)
+![Dashboard Preview](docs/screenshots/overview.png)
+![Providers View](docs/screenshots/providers.png)
+![Routing View](docs/screenshots/routing.png)
 
 ## ✨ Features
 
