@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  omniwave:
+    build: .
+    container_name: omniwave
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:20128:20128"
+    volumes:
+      - omniwave-data:/app/data
+    environment:
+      - PORT=20128
+      - NODE_ENV=production
+    stop_grace_period: 40s
+
+volumes:
+  omniwave-data:
