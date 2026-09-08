@@ -5,110 +5,79 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>OmniWave Gateway — Dashboard</title>
 <link rel="stylesheet" href="/css/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
 </head>
 <body>
+
 <nav class="sidebar">
   <div class="logo">
-    <span class="logo-icon">⚡</span>
-    <span class="logo-text">OmniWave</span>
+    <div class="logo-icon">⚡</div>
+    <div>
+      <div class="logo-text">OmniWave</div>
+      <div class="logo-badge">v1.0.0</div>
+    </div>
   </div>
   <ul class="nav-links">
-    <li class="active" data-tab="overview">📊 Overview</li>
-    <li data-tab="providers">🌐 Providers</li>
-    <li data-tab="models">🧠 Models</li>
-    <li data-tab="routing">🔀 Routing</li>
-    <li data-tab="compression">🗜️ Compression</li>
-    <li data-tab="resilience">🛡️ Resilience</li>
-    <li data-tab="logs">📋 Logs</li>
-    <li data-tab="settings">⚙️ Settings</li>
+    <li class="active" data-tab="overview"><span class="nav-icon">📊</span> <span>Overview</span></li>
+    <li data-tab="providers"><span class="nav-icon">🌐</span> <span>Providers</span></li>
+    <li data-tab="models"><span class="nav-icon">🧠</span> <span>Models</span></li>
+    <li data-tab="routing"><span class="nav-icon">🔀</span> <span>Routing</span></li>
+    <li data-tab="compression"><span class="nav-icon">🗜️</span> <span>Compression</span></li>
+    <li data-tab="resilience"><span class="nav-icon">🛡️</span> <span>Resilience</span></li>
+    <li data-tab="logs"><span class="nav-icon">📋</span> <span>Logs</span></li>
+    <li data-tab="settings"><span class="nav-icon">⚙️</span> <span>Settings</span></li>
   </ul>
   <div class="sidebar-footer">
     <div class="status-dot"></div>
-    <span>v1.0.0</span>
+    <span>Gateway Running</span>
   </div>
 </nav>
 
 <main class="content">
-  <!-- Overview Tab -->
+
+  <!-- ─── Overview ─── -->
   <section id="tab-overview" class="tab active">
     <h1>Gateway Overview</h1>
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-value" id="stat-requests">0</div>
-        <div class="stat-label">Total Requests</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-value" id="stat-tokens">0</div>
-        <div class="stat-label">Total Tokens</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-value" id="stat-providers">0</div>
-        <div class="stat-label">Connected Providers</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-value" id="stat-models">0</div>
-        <div class="stat-label">Available Models</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-value" id="stat-saved">0</div>
-        <div class="stat-label">Tokens Saved</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-value" id="stat-uptime">0s</div>
-        <div class="stat-label">Uptime</div>
-      </div>
-    </div>
+    <div class="stats-grid" id="overview-stats"></div>
     <div class="card">
       <h2>Quick Start</h2>
       <div class="quickstart">
-        <div class="qs-step">
-          <span class="qs-num">1</span>
-          <div><strong>Connect a Provider</strong><br><span class="muted">Go to Providers tab → add your API key</span></div>
-        </div>
-        <div class="qs-step">
-          <span class="qs-num">2</span>
-          <div><strong>Point Your Tool</strong><br><span class="muted">Base URL: <code id="qs-endpoint">http://localhost:20128/v1</code></span></div>
-        </div>
-        <div class="qs-step">
-          <span class="qs-num">3</span>
-          <div><strong>Set API Key</strong><br><span class="muted"><code id="qs-apikey">Loading...</code></span></div>
-        </div>
-        <div class="qs-step">
-          <span class="qs-num">4</span>
-          <div><strong>Use Auto Routing</strong><br><span class="muted">Set model to <code>auto</code> for smart routing</span></div>
-        </div>
+        <div class="qs-step"><div class="qs-num">1</div><div><strong>Connect a Provider</strong><div class="desc">Go to Providers tab and add your API key</div></div></div>
+        <div class="qs-step"><div class="qs-num">2</div><div><strong>Point Your Tool</strong><div class="desc">Base URL: <code id="qs-endpoint">http://localhost:20128/v1</code></div></div></div>
+        <div class="qs-step"><div class="qs-num">3</div><div><strong>Set API Key</strong><div class="desc"><code id="qs-apikey">Loading...</code></div></div></div>
+        <div class="qs-step"><div class="qs-num">4</div><div><strong>Use Auto Routing</strong><div class="desc">Set model to <code>auto</code> for smart routing</div></div></div>
       </div>
     </div>
     <div class="card">
-      <h2>Connected Providers</h2>
+      <div class="card-header"><h2>Connected Providers</h2></div>
       <div id="overview-providers" class="provider-list"></div>
     </div>
   </section>
 
-  <!-- Providers Tab -->
+  <!-- ─── Providers ─── -->
   <section id="tab-providers" class="tab">
     <h1>Provider Management</h1>
     <div id="provider-cards" class="provider-cards"></div>
   </section>
 
-  <!-- Models Tab -->
+  <!-- ─── Models ─── -->
   <section id="tab-models" class="tab">
     <h1>Model Catalog</h1>
     <div class="search-bar">
-      <input type="text" id="model-search" placeholder="Search models...">
+      <input type="text" id="model-search" class="search-input" placeholder="Search models by name or provider...">
     </div>
     <div id="model-list" class="model-table"></div>
   </section>
 
-  <!-- Routing Tab -->
+  <!-- ─── Routing ─── -->
   <section id="tab-routing" class="tab">
     <h1>Routing Strategies</h1>
     <div class="card">
       <h2>Active Strategy</h2>
-      <select id="routing-strategy" class="select-input">
+      <select id="routing-strategy" class="select-input" style="margin-top:0.5rem">
         <option value="auto">auto — Smart auto-combo (balanced)</option>
         <option value="auto/fast">auto/fast — Lowest latency</option>
-        <option value="auto/cheap">auto/cheap — Cheapest provider</option>
+        <option value="auto/cheap">auto/cheap — Cheapest per token</option>
         <option value="auto/coding">auto/coding — Code quality first</option>
         <option value="auto/offline">auto/offline — Most quota headroom</option>
         <option value="priority">priority — Ordered list</option>
@@ -126,94 +95,96 @@
       </select>
     </div>
     <div class="card">
-      <h2>All 19 Strategies</h2>
+      <div class="card-header"><h2>All Strategies</h2></div>
       <div id="strategy-list" class="strategy-grid"></div>
     </div>
   </section>
 
-  <!-- Compression Tab -->
+  <!-- ─── Compression ─── -->
   <section id="tab-compression" class="tab">
     <h1>Context Compression</h1>
     <div class="card">
       <h2>Compression Mode</h2>
-      <div class="compression-modes">
-        <button class="mode-btn" data-mode="off">Off</button>
-        <button class="mode-btn" data-mode="lite">Lite</button>
-        <button class="mode-btn active" data-mode="standard">Standard</button>
-        <button class="mode-btn" data-mode="aggressive">Aggressive</button>
-        <button class="mode-btn" data-mode="ultra">Ultra</button>
-      </div>
-      <div class="compression-stats" id="compression-stats"></div>
+      <div class="compression-modes" id="compression-modes"></div>
+      <div class="compression-stats" id="compression-stats">Loading...</div>
     </div>
     <div class="card">
-      <h2>Compression Engines</h2>
+      <div class="card-header"><h2>Compression Engines</h2></div>
       <div class="engine-grid">
-        <div class="engine-card"><span class="engine-icon">🔄</span><strong>Dedup System</strong><p>Remove duplicate system messages</p></div>
-        <div class="engine-card"><span class="engine-icon">⛏️</span><strong>Caveman</strong><p>Truncate long tool outputs</p></div>
-        <div class="engine-card"><span class="engine-icon">🧹</span><strong>Filler Removal</strong><p>Strip filler words and phrases</p></div>
-        <div class="engine-card"><span class="engine-icon">📐</span><strong>Whitespace</strong><p>Condense extra whitespace</p></div>
-        <div class="engine-card"><span class="engine-icon">🔗</span><strong>Merge</strong><p>Merge consecutive same-role msgs</p></div>
-        <div class="engine-card"><span class="engine-icon">✂️</span><strong>Truncate</strong><p>Fit within context window</p></div>
+        <div class="engine-card"><div class="engine-icon">🔄</div><strong>Dedup System</strong><p>Remove duplicate system messages</p></div>
+        <div class="engine-card"><div class="engine-icon">⛏️</div><strong>Caveman</strong><p>Truncate long tool outputs aggressively</p></div>
+        <div class="engine-card"><div class="engine-icon">🧹</div><strong>Filler Removal</strong><p>Strip filler words and phrases</p></div>
+        <div class="engine-card"><div class="engine-icon">📐</div><strong>Whitespace</strong><p>Condense extra whitespace and newlines</p></div>
+        <div class="engine-card"><div class="engine-icon">🔗</div><strong>Merge</strong><p>Merge consecutive same-role messages</p></div>
+        <div class="engine-card"><div class="engine-icon">✂️</div><strong>Truncate</strong><p>Fit within model context window</p></div>
       </div>
     </div>
   </section>
 
-  <!-- Resilience Tab -->
+  <!-- ─── Resilience ─── -->
   <section id="tab-resilience" class="tab">
-    <h1>Resilience & Circuit Breakers</h1>
+    <h1>Resilience &amp; Circuit Breakers</h1>
     <div class="card">
-      <h2>3-Layer Protection</h2>
+      <div class="card-header"><h2>3-Layer Protection</h2></div>
       <div class="layer-grid">
         <div class="layer-card">
-          <span class="layer-num">1</span>
+          <div class="layer-num">1</div>
           <strong>Provider Circuit Breaker</strong>
-          <p>Trips on 408/5xx errors · Threshold: 5 failures · Cooldown: 60s</p>
+          <p>Trips on 408/5xx errors. Threshold: 5 failures. Cooldown: 60s with HALF-OPEN probe. Reroutes to next provider while OPEN.</p>
         </div>
         <div class="layer-card">
-          <span class="layer-num">2</span>
+          <div class="layer-num">2</div>
           <strong>Connection Cooldown</strong>
-          <p>Exponential backoff · 429 Retry-After · Anti-thundering-herd</p>
+          <p>Exponential backoff with anti-thundering-herd guard. 429 honors Retry-After. Success clears all error state.</p>
         </div>
         <div class="layer-card">
-          <span class="layer-num">3</span>
+          <div class="layer-num">3</div>
           <strong>Model Lockout</strong>
-          <p>Per-model 429/404 lockout · Never locks whole connection</p>
+          <p>Per-model 429/404 lockout. Only locks the failing model, never the whole connection or provider.</p>
         </div>
       </div>
     </div>
     <div class="card">
-      <h2>Circuit Breaker Status</h2>
-      <div id="breaker-status" class="breaker-grid"></div>
+      <div class="card-header"><h2>Circuit Breaker Status</h2></div>
+      <div id="breaker-status" class="breaker-grid">
+        <div class="empty-state"><div class="icon">🛡️</div><p>No circuit breaker events yet. They appear after failed requests.</p></div>
+      </div>
     </div>
   </section>
 
-  <!-- Logs Tab -->
+  <!-- ─── Logs ─── -->
   <section id="tab-logs" class="tab">
     <h1>Request Logs</h1>
     <div class="card">
-      <button class="btn" onclick="loadLogs()">Refresh</button>
-      <div id="log-list" class="log-table"></div>
+      <div class="card-header">
+        <h2>Recent Requests</h2>
+        <button class="btn btn-secondary btn-sm" onclick="loadLogs()">↻ Refresh</button>
+      </div>
+      <div id="log-list" class="log-table">
+        <div class="empty-state"><div class="icon">📋</div><p>No logs yet. Logs appear after making requests through the gateway.</p></div>
+      </div>
     </div>
   </section>
 
-  <!-- Settings Tab -->
+  <!-- ─── Settings ─── -->
   <section id="tab-settings" class="tab">
     <h1>Settings</h1>
     <div class="card">
-      <h2>Gateway Info</h2>
-      <div class="settings-grid">
-        <div><span class="muted">Endpoint:</span> <code id="set-endpoint"></code></div>
-        <div><span class="muted">API Key:</span> <code id="set-apikey"></code> <button class="btn-sm" onclick="copyApiKey()">Copy</button></div>
-        <div><span class="muted">Port:</span> <code id="set-port"></code></div>
-      </div>
+      <div class="card-header"><h2>Gateway Information</h2></div>
+      <div class="settings-grid" id="settings-info"></div>
     </div>
     <div class="card">
-      <h2>Export</h2>
-      <button class="btn" onclick="exportEnv()">Export as .env</button>
+      <div class="card-header"><h2>Export</h2></div>
+      <div style="display:flex;gap:0.5rem">
+        <button class="btn btn-secondary" onclick="exportEnv()">📥 Export as .env</button>
+        <button class="btn btn-secondary" onclick="copyApiKey()">📋 Copy API Key</button>
+      </div>
     </div>
   </section>
+
 </main>
 
+<div class="toast" id="toast"></div>
 <script src="/js/app.js"></script>
 </body>
 </html>
