@@ -28,10 +28,12 @@ let stats = { totalRequests: 0, totalTokens: 0, uptime: Date.now() };
 
 // ─── Auth middleware ───
 function authMiddleware(req, res, next) {
-  // Allow dashboard, static files, and management API without auth
-  if (req.path.startsWith('/api/') || req.path.startsWith('/v1/') || req.path.startsWith('/vscode/')) return next();
+  // Allow dashboard UI, static files, and local management API without auth
+  // (management API is only reachable on localhost by design)
   if (req.path === '/' || req.path.startsWith('/css') || req.path.startsWith('/js') || req.path.startsWith('/favicon')) return next();
+  if (req.path.startsWith('/api/')) return next();
 
+  // All /v1/* and /vscode/* endpoints REQUIRE the API key
   // Check Bearer token
   const auth = req.headers.authorization || '';
   const key = auth.replace(/^Bearer\s+/i, '');

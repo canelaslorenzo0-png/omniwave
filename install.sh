@@ -13,7 +13,7 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 echo -e "${CYAN}"
 echo "  ╔══════════════════════════════════════════════════╗"
 echo "  ║  ⚡ OmniWave Gateway — Installer                ║"
-echo "  ║  Free AI Router · 350+ Providers · 19 Strategies ║"
+echo "  ║  Free AI Router · 19 Providers · 19 Strategies ║"
 echo "  ╚══════════════════════════════════════════════════╝"
 echo -e "${NC}"
 

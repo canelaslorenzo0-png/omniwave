@@ -17,6 +17,10 @@ const PROVIDERS = {
   nvidia:       { name: 'NVIDIA NIM',   icon: '💚', desc: 'NVIDIA-hosted models',             free: true  },
   cohere:       { name: 'Cohere',       icon: '🔮', desc: 'Command R models',                 free: true  },
   siliconflow:  { name: 'SiliconFlow',  icon: '☁️', desc: 'DeepSeek, Qwen, GLM',              free: true  },
+  opencodezen:  { name: 'OpenCode Zen', icon: '⚡', desc: 'Coding-optimized models',          free: true  },
+  xkiro:        { name: 'Xkiro',        icon: '🛰️', desc: 'Aggregated model access',          free: true  },
+  freebuff:     { name: 'FreeBuff Proxy', icon: '🛡️', desc: 'Proxied model routing',         free: true  },
+  tokenrouter:  { name: 'Token Router', icon: '🔁', desc: 'Token-based API routing',           free: true  },
   custom:       { name: 'Custom Endpoint', icon: '🔗', desc: 'Your own API endpoint',         free: false },
 };
 
@@ -35,6 +39,12 @@ const STRATEGIES = [
   { id: 'random',            name: 'random',            desc: 'Uniform random pick' },
   { id: 'cost-optimized',    name: 'cost-optimized',    desc: 'Minimize cost per request' },
   { id: 'headroom',          name: 'headroom',          desc: 'Most remaining quota' },
+  { id: 'strict-random',     name: 'strict-random',     desc: 'Uniform random with no repeats' },
+  { id: 'reset-window',      name: 'reset-window',      desc: 'Window-aware quota reset' },
+  { id: 'reset-aware',       name: 'reset-aware',       desc: 'Reset-aware with usage rate' },
+  { id: 'context-relay',     name: 'context-relay',     desc: 'Relay context between calls' },
+  { id: 'context-optimized', name: 'context-optimized', desc: 'Largest context models first' },
+  { id: 'cache-optimized',   name: 'cache-optimized',   desc: 'Favor cacheable providers' },
   { id: 'lkgp',              name: 'lkgp',              desc: 'Last-Known-Good Path — sticky routing' },
   { id: 'fusion',            name: 'fusion',            desc: 'Fan out to panel + judge synthesizes' },
   { id: 'pipeline',          name: 'pipeline',          desc: 'Chain steps — each output feeds next' },

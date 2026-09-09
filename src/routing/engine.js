@@ -134,7 +134,9 @@ class RoutingEngine {
   }
 
   strictRandom(providers) {
-    return providers[Math.floor(Math.random() * providers.length)];
+    // True uniform random — every provider equally likely regardless of order
+    const idx = Math.floor(Math.random() * providers.length);
+    return providers[idx];
   }
 
   costOptimized(providers) {
@@ -154,23 +156,53 @@ class RoutingEngine {
   }
 
   resetWindow(providers) {
-    return providers[0]; // Simplified: pick first
+    // Prefer providers with free-tier quotas (which reset on their billing window),
+    // falling back to the least-used provider.
+    const free = providers.filter(p => {
+      const creds = keystore.get(p.id);
+      return p.freeTier || creds?.freeTier;
+    });
+    const pool = free.length > 0 ? free : providers;
+    return pool.reduce((best, p) => {
+      const usage = this.quotaUsage.get(p.id) ?? 0;
+      const bestUsage = this.quotaUsage.get(best.id) ?? 0;
+      return usage < bestUsage ? p : best;
+    });
   }
 
   resetAware(providers) {
-    return providers[0];
+    // Picks the provider with the lowest usage *rate* (requests per quota), which
+    // tends to be one most likely to have refilled since its last reset window.
+    return providers.reduce((best, p) => {
+      const usage = this.quotaUsage.get(p.id) ?? 0;
+      const count = this.requestCounts.get(p.id) ?? 0;
+      const rate = count > 0 ? usage / count : (usage > 0 ? 1 : 0);
+      const bestUsage = this.quotaUsage.get(best.id) ?? 0;
+      const bestCount = this.requestCounts.get(best.id) ?? 0;
+      const bestRate = bestCount > 0 ? bestUsage / bestCount : (bestUsage > 0 ? 1 : 0);
+      return rate < bestRate ? p : best;
+    });
   }
 
   contextRelay(providers) {
-    return providers[0];
+    // Routes via the last-good-path for continuity (relay) when available.
+    const lastId = this.lastGoodPath.get('context-relay');
+    return lastId ? providers.find(p => p.id === lastId) || providers[0] : providers[0];
   }
 
   contextOptimized(providers) {
-    return providers[providers.length - 1]; // Prefer larger context models
+    // Prefer providers with long-context models (>= 128k in the model slug).
+    const longContext = providers.filter(p =>
+      p.models.some(m => /(128k|200k|1m|256k|1\.5m)/i.test(m))
+    );
+    return longContext.length > 0 ? longContext[0] : providers[providers.length - 1];
   }
 
   cacheOptimized(providers) {
-    return providers[0];
+    // Prefer providers with prompt-caching support.
+    const cache = ['openai', 'anthropic', 'deepseek', 'openrouter', 'cerebras', 'nvidia', 'groq'];
+    const cached = providers.filter(p => cache.includes(p.id));
+    return cached.length > 0 ? cached[0] : providers[0];
   }
 
   lkgp(providers) {
@@ -184,7 +216,14 @@ class RoutingEngine {
   }
 
   pipeline(providers) {
-    return providers[0];
+    // Pipeline: use provider with best health, bumping on failure.
+    const healthy = providers.filter(p => (this.healthScores.get(p.id) ?? 1) > 0.3);
+    const pool = healthy.length > 0 ? healthy : providers;
+    return pool.reduce((best, p) => {
+      const health = this.healthScores.get(p.id) ?? 1;
+      const bestHealth = this.healthScores.get(best.id) ?? 1;
+      return health > bestHealth ? p : best;
+    });
   }
 
   isCodingModel(p) {

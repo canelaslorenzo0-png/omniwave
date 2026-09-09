@@ -148,6 +148,7 @@ class CompressionEngine {
   getStats() {
     return {
       ...this.stats,
+      mode: this.mode,
       avgSaved: this.stats.totalRequests > 0 ? Math.round(this.stats.totalSaved / this.stats.totalRequests) : 0,
     };
   }

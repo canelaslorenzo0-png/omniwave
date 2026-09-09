@@ -12,7 +12,7 @@
 
 ## ✨ Features
 
-- **350+ Models** — OpenAI, Anthropic, Gemini, Groq, DeepSeek, OpenRouter, and 10+ more
+- **350+ Models** — OpenAI, Anthropic, Gemini, Groq, DeepSeek, OpenRouter, plus 19 providers
 - **Auto-Routing** — Smart auto-combo with 5 modes (balanced, fast, cheap, coding, offline)
 - **19 Strategies** — Round-robin, weighted, P2C, cost-optimized, pipeline, fusion, and more
 - **Context Compression** — 6 engines reduce token usage by 20-60%
@@ -170,6 +170,10 @@ Set via header: `X-OmniWave-Strategy: auto/fast`
 | NVIDIA NIM | ✅ | NVIDIA-hosted models |
 | Cohere | ✅ | Command R models |
 | SiliconFlow | ✅ | DeepSeek, Qwen, GLM |
+| OpenCode Zen | ✅ | Coding-optimized models |
+| Xkiro | ✅ | Aggregated model access |
+| FreeBuff Proxy | ✅ | Proxied model routing |
+| Token Router | ✅ | Token-based API routing |
 | Custom | — | Any OpenAI-compatible API |
 
 ## 🔧 Environment Variables
