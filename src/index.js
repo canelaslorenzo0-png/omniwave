@@ -155,7 +155,7 @@ app.get('/api/status', (req, res) => {
   const connected = getConnectedProviders();
   res.json({
     name: 'OmniWave Gateway',
-    version: '1.1.0',
+    version: '1.3.0',
     uptime: Math.floor((Date.now() - stats.uptime) / 1000),
     apiKey: API_KEY.substring(0, 12) + '...',
     stats: { ...stats },
